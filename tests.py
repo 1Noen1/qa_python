@@ -24,7 +24,6 @@ class TestBooksCollector:
     # напиши свои тесты ниже
     # чтобы тесты были независимыми в каждом из них создавай отдельный экземпляр класса BooksCollector()
 
-from main import BooksCollector
 
 
 class TestBooksCollector:
