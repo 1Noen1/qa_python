@@ -135,3 +135,21 @@ class TestBooksCollector:
         collection.add_book_in_favorites(first_book)
         collection.delete_book_from_favorites(second_book)
         assert collection.favorites == [first_book]
+
+
+# новые отдельные позитивные тесты 
+    def test_get_books_genre_positive(self):
+        collection = BooksCollector()
+        books = ['Книга1', 'Книга2']
+        for book in books:
+            collection.add_new_book(book)
+        expected = {'Книга1': '', 'Книга2': ''}
+        assert collection.get_books_genre() == expected
+
+    def test_get_list_of_favorites_books_positive(self):
+        collection = BooksCollector()
+        books = ['Книга1', 'Книга2']
+        for book in books:
+            collection.add_new_book(book)
+            collection.add_book_in_favorites(book)
+        assert collection.get_list_of_favorites_books() == ['Книга1', 'Книга2']
