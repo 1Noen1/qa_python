@@ -18,18 +18,16 @@ class TestBooksCollector:
             collection.add_new_book(book)
         assert len(collection.get_books_genre()) == 3
 
-    def test_add_new_book_check_genre_success(self):
-        collection = BooksCollector()
-        first_book = 'Ромео и Джульетта'
-        collection.add_new_book(first_book)
-        assert collection.get_book_genre(first_book) == ''
-
+    # --- Тесты получения жанра (без set_book_genre) ---
     def test_get_book_genre_returns_correct_genre(self):
         collection = BooksCollector()
-        book = 'Книга1'
-        collection.add_new_book(book)
-        collection.set_book_genre(book, 'Фантастика')
-        assert collection.get_book_genre(book) == 'Фантастика'
+        collection.books_genre = {'Книга1': 'Фантастика'}
+        assert collection.get_book_genre('Книга1') == 'Фантастика'
+
+    def test_get_book_genre_returns_empty_if_no_genre(self):
+        collection = BooksCollector()
+        collection.books_genre = {'Книга2': ''}
+        assert collection.get_book_genre('Книга2') == ''
 
     @pytest.mark.parametrize('book', ['', 'МастерМастерМастерМастерМастерМастерМастер'])
     def test_add_new_book_add_incorrect_name_not_added(self, book):
@@ -44,31 +42,32 @@ class TestBooksCollector:
             collection.add_new_book(book)
         assert len(collection.get_books_genre()) == 1
 
-    def test_set_book_genre_changed(self):
-        collection = BooksCollector()
-        first_book = 'Властелин колец'
-        genre = 'Фантастика'
-        other_genre = 'Детективы'
-        collection.add_new_book(first_book)
-        collection.set_book_genre(first_book, genre)
-        collection.set_book_genre(first_book, other_genre)
-        assert collection.get_book_genre(first_book) == other_genre
-
+    # --- Тесты установки жанра ---
     def test_set_book_genre_added(self):
         collection = BooksCollector()
-        first_book = 'Властелин колец'
+        book = 'Властелин колец'
         genre = 'Фантастика'
-        collection.add_new_book(first_book)
-        collection.set_book_genre(first_book, genre)
-        assert collection.get_book_genre(first_book) == genre
+        collection.add_new_book(book)
+        collection.set_book_genre(book, genre)
+        assert collection.get_book_genre(book) == genre
+
+    def test_set_book_genre_changed(self):
+        collection = BooksCollector()
+        book = 'Властелин колец'
+        first_genre = 'Фантастика'
+        new_genre = 'Детективы'
+        collection.add_new_book(book)
+        collection.set_book_genre(book, first_genre)
+        collection.set_book_genre(book, new_genre)
+        assert collection.get_book_genre(book) == new_genre
 
     def test_set_book_genre_missing_genre_not_added(self):
         collection = BooksCollector()
-        first_book = 'Властелин колец'
+        book = 'Властелин колец'
         missing_genre = 'Приключения'
-        collection.add_new_book(first_book)
-        collection.set_book_genre(first_book, missing_genre)
-        assert collection.get_book_genre(first_book) == ''
+        collection.add_new_book(book)
+        collection.set_book_genre(book, missing_genre)
+        assert collection.get_book_genre(book) == ''
 
     def test_get_books_with_specific_genre_success(self):
         collection = BooksCollector()
@@ -136,8 +135,7 @@ class TestBooksCollector:
         collection.delete_book_from_favorites(second_book)
         assert collection.favorites == [first_book]
 
-
-# новые отдельные позитивные тесты 
+    # новые отдельные позитивные тесты 
     def test_get_books_genre_positive(self):
         collection = BooksCollector()
         books = ['Книга1', 'Книга2']
